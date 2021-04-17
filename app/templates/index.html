@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Goatnames</title>
+    <style type="text/css">
+
+        body {
+            margin: 0 auto;
+            width: 850px;
+        }
+
+        h1, h2 {
+            margin-top: 20px;
+            margin-bottom: 0;
+        }
+        
+        textarea {
+            width: 400px;
+            min-width: 400px;
+            min-height: 100px;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .column {
+            width: 400px;
+            padding-right: 20px;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Goatnames Clue-Giver 🐐</h1>
+    <div class="column">
+        <h2>Game Board</h2>
+        <p>To get game board output from Horsepaste, open the browser console (right-click > Inspect element > console) and enter this code:</p>
+        <pre>console.log(Array.from(document.querySelectorAll('.word')).map(e => e.ariaLabel).join('\n'))</pre>
+        <p>Paste the game board text here:</p>
+        <textarea id="input-board"></textarea>
+        <p>Enter cards that have been flipped, one per line:</p>
+        <textarea id="input-flipped"></textarea>
+        <h2>Generate Clues</h2>
+        <p>
+            <span>Generate clues for which team?</span>
+            <select id="input-team">
+                <option value="blue">Blue</option>
+                <option value="red">Red</option>
+            </select>
+        </p>
+        <p>
+            <span>Generate clues for how many cards?</span>
+            <input id="input-count" type="number" min="1" step="1" value="2">
+        </p>
+        <button id="button-submit">Get Clues</button>
+    </div>
+    <div class="column">
+        <h2>Clues</h2>
+        <pre id="output-clues">Get your clues here!</pre>
+    </div>
+    <script type="text/javascript">
+        
+        const inputBoard = document.getElementById("input-board");
+        const inputFlipped = document.getElementById("input-flipped");
+        const selectorTeam = document.getElementById("input-team");
+        const inputCount = document.getElementById("input-count");
+        const submitBtn = document.getElementById("button-submit");
+        const outputClues = document.getElementById("output-clues");
+
+        submitBtn.addEventListener("click", getClues);
+        inputCount.addEventListener("keydown", (e) => (e.key === "Enter" || e.keyCode === 13) ? getClues() : null);
+
+        async function getClues() {
+            const board = inputBoard.value;
+            const flipped = inputFlipped.value;
+            const team = selectorTeam.value;
+            const count = Math.max(parseInt(inputCount.value), 1);
+            const args = { board, flipped, team, count };
+            console.log(args);
+            outputClues.innerText = "Working on it...";
+            const req = await fetch("./api/cluegiver", {
+                method: "POST",
+                mode: "cors",
+                cache: "no-cache",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(args)
+            });
+            const res = await req.json();
+            console.log(res);
+            outputClues.innerText = res.display;
+        }
+
+    </script>
+</body>
+</html>
