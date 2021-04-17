@@ -11,14 +11,18 @@ with open("nltk_stop_words.txt") as file:
     stop_words = set(file.read().strip().split("\n"))
 
 
-def give_clues(board="", flipped="", team="", count=2):
+def parse_cards_from_board(raw):
+    """
+    Returns a list of tuples (word, team, flipped).
+    """
+    out = []
+    for line in raw.lower().strip().split("\n"):
+        data = line.strip().split(", ")
+        out.append((data[0], data[1], "revealed" in data[2]))
+    return out
 
 
-    def parse_cards_from_board(raw):
-        """
-        Returns a list of tuples (word, team).
-        """
-        return [tuple(line.split(", ")[:2]) for line in raw.strip().split("\n")]
+def give_clues(board="", flipped="", team="", count=2, hint=False):
 
     def is_eligible(word):
         is_stop = word in stop_words
@@ -92,7 +96,8 @@ def give_clues(board="", flipped="", team="", count=2):
         f"Showing top {clues_to_return} clues:\n\tScoring by Word2Vec RMSE (lower is better)\n"
     ]
     for i, (hand, w, s) in top_choices[:clues_to_return]:
-        line = f"{i + 1}. {w} for {len(hand)}\n\tHinting at {hand}\n\tScore = {s:.3f}\n"
+        hint_text = f"Hinting at {hand}\n\t" if hint else ""
+        line = f"{i + 1}. {w} for {len(hand)}\n\t{hint_text}Score = {s:.3f}\n"
         lines.append(line)
 
     return {

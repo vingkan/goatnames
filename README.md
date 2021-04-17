@@ -56,7 +56,7 @@ pip3 install -r requirements.txt
 # Download word embeddings
 mkdir embeddings
 wget -O embeddings/glove.6B.zip http://nlp.stanford.edu/data/glove.6B.zip
-unzip embeddings/glove.6B.zip -d glove.6B
+unzip embeddings/glove.6B.zip -d embeddings/glove.6B
 rm embeddings/glove.6B.zip
 # Make model from word embeddings
 mkdir models
@@ -82,6 +82,25 @@ Array.from(document.querySelectorAll('.word')).map(e => e.ariaLabel).join('\n')
 ```python
 glove_file = "/Users/vineshkannan/Documents/GitHub/codenames/glove.6B/glove.6B.100d.txt"
 model = KeyedVectors.load_word2vec_format(glove_file, binary=False, no_header=True)
+```
+
+### Make Environment Variables File
+
+```
+PORT=5000
+ALLOW=http://localhost:5000,http://104.236.21.173:5000
+CHROME=/Users/vineshkannan/Documents/dev/chromedriver
+```
+
+### Download Chromium Webdriver
+
+```bash
+# https://sites.google.com/a/chromium.org/chromedriver/downloads
+mkdir driver
+wget -O driver/chromedriver.zip https://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_linux64.zip
+unzip driver/chromedriver.zip -d driver/chromedriver
+rm driver/chromedriver.zip
+echo -e "CHROME=$(pwd)/driver/chromedriver" >> .env
 ```
 
 ## Notes
