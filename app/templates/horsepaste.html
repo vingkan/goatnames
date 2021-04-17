@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Goatnames</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type="text/css">
 
         body {
@@ -14,8 +15,12 @@
             margin-bottom: 0;
         }
         
-        .input-wide {
-            width: 350px;
+        .input-large {
+            width: 300px;
+        }
+
+        .input-small {
+            width: 50px;
         }
 
         pre {
@@ -37,7 +42,7 @@
     <div class="column">
         <h2>Game Board</h2>
         <p>Enter a Horsepaste URL:</p>
-        <input id="input-horsepaste" type="text" class="input-wide">
+        <input id="input-horsepaste" type="text" class="input-large">
         <h2>Generate Clues</h2>
         <p>
             <span>Generate clues for which team?</span>
@@ -55,7 +60,7 @@
         </p>
         <p>
             <span>Generate clues for how many cards?</span>
-            <input id="input-count" type="number" min="1" step="1" value="2">
+            <input id="input-count" type="number" min="1" step="1" value="2" class="input-small">
         </p>
         <button id="button-submit">Get Clues</button>
     </div>
