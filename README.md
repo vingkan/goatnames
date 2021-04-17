@@ -56,7 +56,7 @@ pip3 install -r requirements.txt
 # Download word embeddings
 mkdir embeddings
 wget -O embeddings/glove.6B.zip http://nlp.stanford.edu/data/glove.6B.zip
-unzip embeddings/glove.6B.zip -d embeddings/glove.6B
+unzip embeddings/glove.6B.zip -d embeddings
 rm embeddings/glove.6B.zip
 # Make model from word embeddings
 mkdir models
@@ -98,9 +98,11 @@ CHROME=/Users/vineshkannan/Documents/dev/chromedriver
 # https://sites.google.com/a/chromium.org/chromedriver/downloads
 mkdir driver
 wget -O driver/chromedriver.zip https://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_linux64.zip
-unzip driver/chromedriver.zip -d driver/chromedriver
+unzip driver/chromedriver.zip -d driver
 rm driver/chromedriver.zip
 echo -e "CHROME=$(pwd)/driver/chromedriver" >> .env
+# If Chrome (in addition to Chrome webdriver) is not installed:
+# https://gist.github.com/ziadoz/3e8ab7e944d02fe872c3454d17af31a5
 ```
 
 ## Notes

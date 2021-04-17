@@ -1,11 +1,13 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from clues import give_clues, parse_cards_from_board
+from clues import parse_cards_from_board
 
 
 def get_board_from_horsepaste(url, chrome_path):
     chrome_opts = Options()
     chrome_opts.add_argument("---headless")
+    chrome_opts.add_argument("---no-sandbox")
+    chrome_opts.add_argument("---disable-dev-shm-usage")
     driver = webdriver.Chrome(chrome_path, options=chrome_opts)
     driver.get(url)
     button = driver.find_element_by_class_name("codemaster")
