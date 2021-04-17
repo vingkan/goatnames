@@ -16,4 +16,5 @@ def get_board_from_horsepaste(url, chrome_path):
     board = "\n".join([el.get_attribute("aria-label") for el in els])
     cards = parse_cards_from_board(board)
     flipped = "\n".join([c[0] for c in cards if c[2]])
+    driver.quit()
     return board, flipped
