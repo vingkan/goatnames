@@ -105,6 +105,14 @@ echo -e "CHROME=$(pwd)/driver/chromedriver" >> .env
 # https://gist.github.com/ziadoz/3e8ab7e944d02fe872c3454d17af31a5
 ```
 
+### Get Random Words
+```js
+// https://randomwordgenerator.com/
+// Pick nouns, adjectives, or verbs, set word size by syllables or letters
+Array.from(document.querySelectorAll(".support")).map(e => e.innerText)
+```
+
 ## Notes
 
 - Stop words list from [sebleier](https://gist.github.com/sebleier/554280)
+- Emoji as favicon from [Lea Verou, Chris Coyier](https://css-tricks.com/emojis-as-favicons)
