@@ -44,6 +44,29 @@ https://spacy.io/
 - Find a pure scoring method that drops the least similar subscore in hands of 3+
 - Let the user pick how many cards they want a clue for
 
+### Account For Danger Words
+
+Goals:
+
+- Don't give clues that will lead to the other team's cards or the assassin card, preferably avoid neutrals as well
+- Pick the best clue that unifies as many of your team's clues as you can
+
+Algorithm:
+
+```
+Store a map of clues to cards the clue is similar to:
+    Good cards, danger cards, neutral cards
+    For each card store a tuple of (card, card type, similarity rank, similarity score)
+For each card that remains unflipped:
+    For each of its top n similar words:
+        Add an entry to the map for this clue, card, card type, similarity rank, and similarity score
+Optionally: Filter out clues that apply to one or fewer good cards
+Optionally: Filter out clues that apply to one or more danger cards
+For each clue:
+    Order the cards from most similar to clue to least similar to clue
+    Calculate the number of consecutive good cards before hitting another type of card
+```
+
 ## Scripts
 
 ### Set Up Repository

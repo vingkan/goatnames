@@ -15,14 +15,31 @@ from flask import (
     render_template
 )
 from flask_cors import CORS
+from gensim.models import KeyedVectors
 from scraper import get_board_from_horsepaste
-from clues import give_clues
+from giver import (
+    parse_cards_from_board,
+    ClueGiver,
+    NClosestClueGiver,
+    make_closest_distance_fn,
+    make_most_similar_fn
+)
 
 
 # Initialize Flask app and enable CORS.
 app = Flask(__name__)
 allow_list = config("ALLOW").strip().split(",")
 cors = CORS(app, resource={"/*": {"origins": allow_list}})
+
+# Load models and stop words list
+model = KeyedVectors.load("models/glove.6B.100d.kv")
+with open("nltk_stop_words.txt") as file:
+    stop_words = set(file.read().strip().split("\n"))
+
+# Initialize clue givers
+cg_closest = NClosestClueGiver(model, stop_words)
+cg_closest.set_limit(100)
+cg_closest.set_get_closest_fn(make_most_similar_fn(topn=500))
 
 
 @app.route("/hello")
@@ -63,7 +80,11 @@ def api_cluegiver():
     Give clues for raw board state.
     """
     args = request.json
-    res = give_clues(**args, hint=True)
+    cg_closest.set_cards_from_board(args["board"], args["flipped"])
+    cg_closest.set_team(args["team"])
+    cg_closest.set_hint_mode(True)
+    cg_closest.set_count(args["count"])
+    res = cg_closest.give_clues()
     return jsonify(res)
 
 
@@ -75,10 +96,12 @@ def api_cluegiver_horsepaste():
     args = request.json
     url = args["horsepaste"]
     board, flipped = get_board_from_horsepaste(url, config("CHROME"))
-    args["board"] = board
-    args["flipped"] = flipped
     del args["horsepaste"]
-    res = give_clues(**args)
+    cg_closest.set_cards_from_board(board, flipped)
+    cg_closest.set_team(args["team"])
+    cg_closest.set_hint_mode(args["hint"])
+    cg_closest.set_count(args["count"])
+    res = cg_closest.give_clues()
     return jsonify(res)
 
 
