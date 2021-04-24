@@ -67,6 +67,8 @@ For each clue:
     Calculate the number of consecutive good cards before hitting another type of card
 ```
 
+Maybe we should also do another pass over clues and get the similarity of that clue to all cards? Then we can pick the clues that divide the cards into a ranking where the first, consecutive cards in the ranking are our team and then there is a large drop in similarity before we get to a danger or neutral card.
+
 ## Scripts
 
 ### Set Up Repository

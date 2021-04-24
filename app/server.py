@@ -22,7 +22,8 @@ from giver import (
     ClueGiver,
     NClosestClueGiver,
     make_closest_distance_fn,
-    make_most_similar_fn
+    make_most_similar_fn,
+    CarefulClueGiver
 )
 
 
@@ -40,6 +41,37 @@ with open("nltk_stop_words.txt") as file:
 cg_closest = NClosestClueGiver(model, stop_words)
 cg_closest.set_limit(100)
 cg_closest.set_get_closest_fn(make_most_similar_fn(topn=500))
+
+cg_careful = CarefulClueGiver(model, stop_words)
+cg_careful.set_limit(100)
+
+
+def set_state(cg, args):
+    if "horsepaste" in args:
+        url = args["horsepaste"]
+        board, flipped = get_board_from_horsepaste(url, config("CHROME"))
+    else:
+        board = args["board"]
+        flipped = args["flipped"]
+    cg.set_cards_from_board(board, flipped)
+    cg.set_team(args["team"])
+    cg.set_hint_mode(args["hint"] if "hint" in args else True)
+    if "count" in args:
+        cg.set_count(args["count"])
+
+
+def get_closest_clues(args):
+    set_state(cg_closest, args)
+    return cg_closest.give_clues()
+
+
+def get_careful_clues(args):
+    del args["count"]
+    set_state(cg_careful, args)
+    return cg_careful.give_clues()
+
+
+get_clues_by_strategy = get_careful_clues
 
 
 @app.route("/hello")
@@ -80,11 +112,7 @@ def api_cluegiver():
     Give clues for raw board state.
     """
     args = request.json
-    cg_closest.set_cards_from_board(args["board"], args["flipped"])
-    cg_closest.set_team(args["team"])
-    cg_closest.set_hint_mode(True)
-    cg_closest.set_count(args["count"])
-    res = cg_closest.give_clues()
+    res = get_clues_by_strategy(args)
     return jsonify(res)
 
 
@@ -94,14 +122,7 @@ def api_cluegiver_horsepaste():
     Give clues for horsepaste URL.
     """
     args = request.json
-    url = args["horsepaste"]
-    board, flipped = get_board_from_horsepaste(url, config("CHROME"))
-    del args["horsepaste"]
-    cg_closest.set_cards_from_board(board, flipped)
-    cg_closest.set_team(args["team"])
-    cg_closest.set_hint_mode(args["hint"])
-    cg_closest.set_count(args["count"])
-    res = cg_closest.give_clues()
+    res = get_clues_by_strategy(args)
     return jsonify(res)
 
 

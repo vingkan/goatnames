@@ -3,7 +3,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from clues import parse_cards_from_board
+from giver import parse_cards_from_board
 
 
 def get_board_from_horsepaste(url, chrome_path):
