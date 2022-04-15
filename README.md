@@ -1,5 +1,11 @@
 # Codenames Bot
 
+## Start
+
+```bash
+python3 app/server.py
+```
+
 ## Algorithms
 
 ### Clue-Giving
@@ -120,9 +126,9 @@ CHROME=/Users/vineshkannan/Documents/dev/chromedriver
 ### Download Chromium Webdriver
 
 ```bash
-# https://sites.google.com/a/chromium.org/chromedriver/downloads
+# https://chromedriver.chromium.org/downloads
 mkdir driver
-wget -O driver/chromedriver.zip https://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_linux64.zip
+wget -O driver/chromedriver.zip https://chromedriver.storage.googleapis.com/100.0.4896.60/chromedriver_linux64.zip
 unzip driver/chromedriver.zip -d driver
 rm driver/chromedriver.zip
 echo -e "CHROME=$(pwd)/driver/chromedriver" >> .env
