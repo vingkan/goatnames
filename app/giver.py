@@ -246,14 +246,15 @@ class CarefulClueGiver(ClueGiver):
         for clue, cards, stats in candidates:
             num = stats["consecutive_good"]
             lines.append(f"\n{clue} for {num}")
-            if show_stats:
-                stat_line = "\n".join([f"{k}: {v:.3f}" for k, v in stats.items()])
-                lines.append(f"---\n{stat_line}\n---")
-            first_sim_score = cards[0][2]
-            for i, (card, team, sim_score) in enumerate(cards):
-                if i == num:
-                    lines.append("\t---")
-                lines.append(f"\t{card}, {team}, {sim_score:.3f}")
+            if self.show_hint:
+                if show_stats:
+                    stat_line = "\n".join([f"{k}: {v:.3f}" for k, v in stats.items()])
+                    lines.append(f"---\n{stat_line}\n---")
+                first_sim_score = cards[0][2]
+                for i, (card, team, sim_score) in enumerate(cards):
+                    if i == num:
+                        lines.append("\t---")
+                    lines.append(f"\t{card}, {team}, {sim_score:.3f}")
 
         return {
             "success": True,
